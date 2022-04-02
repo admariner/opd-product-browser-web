@@ -10,7 +10,7 @@ def run():
 
     img_path_base = 'C:/Users/Philippe/media/gtin-new/';
 
-    img_name = gtin + '.png'
+    img_name = f'{gtin}.png'
 
 
 
@@ -40,14 +40,14 @@ def run():
         #f.close()
 
         if Gtin_img.objects.filter(pk=gtin).exists():
-            current_gtin = Gtin_img.objects.get(pk=str(gtin))
+            current_gtin = Gtin_img.objects.get(pk=gtin)
             current_gtin.GTIN_IMG = filedata
             current_gtin.save()
         else:
             new_entry = Gtin_img(GTIN_CD =  gtin, GTIN_IMG = filedata)
             new_entry.save()
 
-        print (img_name  + ' OK')
+        print(f'{img_name} OK')
     else:
 
-        print (img_name  + ' KO')
+        print(f'{img_name} KO')

@@ -25,10 +25,7 @@ class BrandSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_img(self, obj):
         result = ""
-        if obj.BSIN:
-            result = settings.MEDIA_URL + "brand/" + obj.BSIN + ".jpg"
-        else:
-            result = ""
+        result = f'{settings.MEDIA_URL}brand/{obj.BSIN}.jpg' if obj.BSIN else ""
         return result
 
 class GPC_S_Serializer(serializers.HyperlinkedModelSerializer):
@@ -47,11 +44,7 @@ class GPC_S_Serializer(serializers.HyperlinkedModelSerializer):
 
     def get_img(self, obj):
         result = ""
-        if obj.GPC_CD:
-            result = settings.MEDIA_URL + "gpc/" + str(obj.GPC_CD) + ".jpg"
-        else:
-            result = ""
-        return result
+        return f'{settings.MEDIA_URL}gpc/{str(obj.GPC_CD)}.jpg' if obj.GPC_CD else ""
 
 class GPC_F_Serializer(serializers.HyperlinkedModelSerializer):
     code = serializers.SerializerMethodField()
@@ -167,13 +160,13 @@ class GtinSerializer(serializers.HyperlinkedModelSerializer):
         result = ""
         if obj.M_G:
             if obj.M_G >= 1000:
-                result = str(obj.PKG_UNIT) + " x " + str(obj.M_G/1000) +  " kg"
+                result = f'{str(obj.PKG_UNIT)} x {str(obj.M_G/1000)} kg'
             else:
-                result = str(obj.PKG_UNIT) + " x " + str(obj.M_G) + " g"
+                result = f'{str(obj.PKG_UNIT)} x {str(obj.M_G)} g'
             if obj.M_OZ:
                 result += " / "
         elif obj.M_OZ:
-            result += str(obj.PKG_UNIT) + " x " + str(obj.M_OZ) + " oz"
+            result += f'{str(obj.PKG_UNIT)} x {str(obj.M_OZ)} oz'
         else:
             result += ""
         return result
@@ -182,13 +175,13 @@ class GtinSerializer(serializers.HyperlinkedModelSerializer):
         result = ""
         if obj.M_ML:
             if obj.M_ML >= 1000:
-                result = str(obj.PKG_UNIT) + " x " + str(obj.M_ML/1000) +  " l"
+                result = f'{str(obj.PKG_UNIT)} x {str(obj.M_ML/1000)} l'
             else:
-                result = str(obj.PKG_UNIT) + " x " + str(obj.M_ML) +  " ml"
+                result = f'{str(obj.PKG_UNIT)} x {str(obj.M_ML)} ml'
             if obj.M_FLOZ:
                 result += " / "
         elif obj.M_FLOZ:
-            result += str(obj.PKG_UNIT) + " x " + str(obj.M_FLOZ) + " floz"
+            result += f'{str(obj.PKG_UNIT)} x {str(obj.M_FLOZ)} floz'
         else:
             result += ""
         return result
@@ -196,17 +189,19 @@ class GtinSerializer(serializers.HyperlinkedModelSerializer):
     def get_alcohol(self, obj):
         result = ""
         if obj.M_ABV:
-            result = str(obj.M_ABV) + " % vol."
+            return f'{str(obj.M_ABV)} % vol.'
         elif obj.M_ABW:
-            result = str(obj.M_ABW) + " % vol."
+            return f'{str(obj.M_ABW)} % vol.'
         else:
-            result = ""
-        return result
+            return ""
 
     def get_img(self, obj):
         result = ""
         if obj.GTIN_CD:
-            result = settings.MEDIA_URL + "gtin/gtin-" + obj.GTIN_CD[:3] + "/" + obj.GTIN_CD + ".jpg"
+            return (
+                f'{settings.MEDIA_URL}gtin/gtin-{obj.GTIN_CD[:3]}/{obj.GTIN_CD}'
+                + ".jpg"
+            )
+
         else:
-            result = ""
-        return result
+            return ""

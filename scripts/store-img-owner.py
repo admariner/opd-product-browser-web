@@ -6,11 +6,11 @@ def run():
 
     #list_gtin = Gtin.objects.filter(GTIN_CD__startswith = '083609')
     list_Owner = Brand_owner.objects.all().order_by('OWNER_CD')
+    img_path_base = 'C:/Users/Philippe/media/Owner/';
+
     for Ownerobj in list_Owner:
         OWNER_CD = Ownerobj.OWNER_CD
-        img_path_base = 'C:/Users/Philippe/media/Owner/';
-
-        img_name = str(OWNER_CD).zfill(6) + '.jpg'
+        img_name = f'{str(OWNER_CD).zfill(6)}.jpg'
 
         img_path_full = img_path_base + img_name
 
@@ -19,11 +19,9 @@ def run():
                 #filedata = base64.b64encode(image_file.read())
                 #filedata = image_file.encode("base64")
 
-            f = open(img_path_full,'rb')
-            filedata = f.read()
-            f.close()
-
-            print (img_name  + ' OK')
+            with open(img_path_full,'rb') as f:
+                filedata = f.read()
+            print(f'{img_name} OK')
 
             if Brand_owner_img.objects.filter(pk=str(OWNER_CD)).exists():
                 current_OWNER_CD = Brand_owner_img.objects.get(pk=str(OWNER_CD))
@@ -34,6 +32,6 @@ def run():
                 new_entry.save()
 
 
-            #Gtin_img.objects.create(GTIN_CD = str(gtin) , GTIN_IMG = filedata )
+                    #Gtin_img.objects.create(GTIN_CD = str(gtin) , GTIN_IMG = filedata )
         else:
-            print (img_name  + ' :(' + img_path_full)
+            print(f'{img_name} :({img_path_full}')

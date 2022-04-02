@@ -26,7 +26,16 @@ def Show_gtin_img(request,pk):
     #return HttpResponse(BinaryImg, 'image/jpg')
 
     # 2. If images are stored on amazon S3
-    return HttpResponse(requests.get('http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-' + pk[0:3] + '/' + pk + '.jpg' ), 'image/jpg')
+    return HttpResponse(
+        requests.get(
+            'http://product.okfn.org.s3.amazonaws.com/images/gtin/gtin-'
+            + pk[:3]
+            + '/'
+            + pk
+            + '.jpg'
+        ),
+        'image/jpg',
+    )
 
 def Show_brand_img(request,pk):
     # 1. If images are stored in database
@@ -71,7 +80,7 @@ class ViewGtin(generic.DetailView):
 
     def get_object(self):
         object = super(ViewGtin, self).get_object()
-        if object.GTIN_CD and object.GTIN_CD[0:1] == "0":
+        if object.GTIN_CD and object.GTIN_CD[:1] == "0":
             object.UPC_CD = object.GTIN_CD[1:12]
         object.save()
         return object
